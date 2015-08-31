@@ -40,11 +40,16 @@ jQuery(document).ready(function($) {
 
 	var news = [];
 	var newsIndex = 0;
+	var newsDescription = [];
+	var newsDate = [];
+	var newsLink = [];
 
 	var eventList = [];
 
 	var lastCompliment;
 	var compliment;
+	
+	var newsDelay = 2000;
 
     moment.lang(lang);
 
@@ -76,34 +81,47 @@ jQuery(document).ready(function($) {
 		}, 3000);
 	})();
 
+	//play "Mirror Mirror on the Wall" from Snow White
+	/*(function playVideo()
+	{
+		$('.video').hide();
+	
+		$('.play-video').on('click', function(ev) {
+			$("#video")[0].src += "&autoplay=1";
+			ev.preventDefault();
+	 });
+	})();*/
+	
 	(function updateTime()
 	{
         var now = moment();
         var date = now.format('LLLL').split(' ',4);
-        date = date[0] + ' ' + date[1] + ' ' + date[2] + ' ' + date[3];
+        date = date[0] + ' ' + date[1] + ' ' + date[2] + ', ' + date[3];
 
 		$('.date').html(date);
-		$('.time').html(now.format('HH') + ':' + now.format('mm') + '<span class="sec">'+now.format('ss')+'</span>');
-
+		date2 = now.format('LLLL').substring(date.length, now.format('LLLL').length - 3);
+		date3 = now.format('LLLL').substring(now.format('LLLL').length - 3).toLowerCase();
+		$('.time').html(date2 +  '<span class="sec">'+now.format('ss')+'</span>' + date3, 2000);
+		
 		setTimeout(function() {
 			updateTime();
 		}, 1000);
 	})();
-
+	
 	(function updateCalendarData()
 	{
 		new ical_parser("calendar.php", function(cal){
         	events = cal.getEvents();
         	eventList = [];
 
-        	for (var i in events) {
+			for (var i in events) {
         		var e = events[i];
         		for (var key in e) {
         			var value = e[key];
-					var seperator = key.search(';');
-					if (seperator >= 0) {
-						var mainKey = key.substring(0,seperator);
-						var subKey = key.substring(seperator+1);
+					var separator = key.search(';');
+					if (separator >= 0) {
+						var mainKey = key.substring(0,separator);
+						var subKey = key.substring(separator+1);
 
 						var dt;
 						if (subKey == 'VALUE=DATE') {
@@ -131,7 +149,7 @@ jQuery(document).ready(function($) {
                     var startDate = moment(e.startDate);
                 }
 
-        		//only add fututre events, days doesn't work, we need to check seconds
+        		//only add future events, days doesn't work, we need to check seconds
         		if (seconds >= 0) {
                     if (seconds <= 60*60*5 || seconds >= 60*60*24*2) {
                         var time_string = moment(startDate).fromNow();
@@ -181,15 +199,16 @@ jQuery(document).ready(function($) {
 		table = $('<table/>').addClass('xsmall').addClass('calendar-table');
 		opacity = 1;
 
-
 		for (var i in eventList) {
-			var e = eventList[i];
-
-			var row = $('<tr/>').css('opacity',opacity);
-			row.append($('<td/>').html(e.description).addClass('description'));
-			row.append($('<td/>').html(e.days).addClass('days dimmed'));
-			table.append(row);
-
+			var e = eventList[i];		
+			
+			if (i < NUM_EVENTS){
+				var row = $('<tr/>').css('opacity',opacity);
+				row.append($('<td/>').html(e.description).addClass('description'));
+				row.append($('<td/>').html(e.days).addClass('days dimmed'));
+				table.append(row);
+			}
+		
 			opacity -= 1 / eventList.length;
 		}
 
@@ -210,9 +229,11 @@ jQuery(document).ready(function($) {
       var date = new Date();
       var hour = date.getHours();
       //set compliments to use
-      if (hour >= 3 && hour < 12) compliments = morning;
+      if (hour >= 3 && hour < 9) compliments = morning;
+      if (hour >= 9 && hour < 12) compliments = midmorning;
       if (hour >= 12 && hour < 17) compliments = afternoon;
-      if (hour >= 17 || hour < 3) compliments = evening;
+      if (hour >= 17 && hour < 22) compliments = evening;
+      if (hour >= 22 || hour < 3) compliments = night;
 
 		compliment = Math.floor(Math.random()*compliments.length);
 		}
@@ -251,11 +272,11 @@ jQuery(document).ready(function($) {
 		}
 
 
-		$.getJSON('http://api.openweathermap.org/data/2.5/weather', weatherParams, function(json, textStatus) {
+		$.getJSON('http://api.openweathermap.org/data/2.5/weather?q=Cambridge,us&mode=json', weatherParams, function(json, textStatus) {
 
 			var temp = roundVal(json.main.temp);
-			var temp_min = roundVal(json.main.temp_min);
-			var temp_max = roundVal(json.main.temp_max);
+			// var temp_min = roundVal(json.main.temp_min);
+			// var temp_max = roundVal(json.main.temp_max);
 
 			var wind = roundVal(json.wind.speed);
 
@@ -267,9 +288,22 @@ jQuery(document).ready(function($) {
 			// $('.forecast').updateWithText(forecast, 1000);
 
 			var now = new Date();
-			var sunrise = new Date(json.sys.sunrise*1000).toTimeString().substring(0,5);
-			var sunset = new Date(json.sys.sunset*1000).toTimeString().substring(0,5);
-
+			//var sunrise = new Date(json.sys.sunrise*1000).toTimeString().substring(0,5);
+			//var sunset = new Date(json.sys.sunset*1000).toTimeString().substring(0,5);
+			var sunrise = new Date(json.sys.sunrise*1000).toTimeString().substring(0,2) + new Date(json.sys.sunrise*1000).toTimeString().substring(3,5);
+			var hours24 = parseInt(sunrise.substring(0, 2), 10);
+			var hours = ((hours24 + 11) % 12) + 1;
+			var amPm = hours24 > 11 ? 'pm' : 'am';
+			var minutes = sunrise.substring(2);
+			sunrise = hours + ":" + minutes + amPm;
+			
+			var sunset = new Date(json.sys.sunset*1000).toTimeString().substring(0,2) + new Date(json.sys.sunrise*1000).toTimeString().substring(3,5);
+			var hours24 = parseInt(sunset.substring(0, 2), 10);
+			var hours = ((hours24 + 11) % 12) + 1;
+			var amPm = hours24 > 11 ? 'pm' : 'am';
+			var minutes = sunset.substring(2);
+			sunset = hours + ":" + minutes + amPm;
+			
 			var windString = '<span class="wi wi-strong-wind xdimmed"></span> ' + kmh2beaufort(wind) ;
 			var sunString = '<span class="wi wi-sunrise xdimmed"></span> ' + sunrise;
 			if (json.sys.sunrise*1000 < now && json.sys.sunset*1000 > now) {
@@ -306,8 +340,7 @@ jQuery(document).ready(function($) {
 			'13n':'wi-night-snow',
 			'50n':'wi-night-alt-cloudy-windy'
 		}
-			$.getJSON('http://api.openweathermap.org/data/2.5/forecast', weatherParams, function(json, textStatus) {
-
+			$.getJSON('http://api.openweathermap.org/data/2.5/forecast/', weatherParams, function(json, textStatus) {
 			var forecastData = {};
 
 			for (var i in json.list) {
@@ -323,8 +356,8 @@ jQuery(document).ready(function($) {
 					};
 				} else {
 					forecastData[dateKey]['icon'] = forecast.weather[0].icon;
-					forecastData[dateKey]['temp_min'] = (forecast.main.temp < forecastData[dateKey]['temp_min']) ? forecast.main.temp : forecastData[dateKey]['temp_min'];
-					forecastData[dateKey]['temp_max'] = (forecast.main.temp > forecastData[dateKey]['temp_max']) ? forecast.main.temp : forecastData[dateKey]['temp_max'];
+					forecastData[dateKey]['temp_min'] = (forecast.main.temp < forecastData[dateKey]['temp_min']) ? forecast.main.temp: forecastData[dateKey]['temp_min']
+					forecastData[dateKey]['temp_max'] = (forecast.main.temp > forecastData[dateKey]['temp_max']) ? forecast.main.temp: forecastData[dateKey]['temp_max'];
 				}
 
 			}
@@ -361,21 +394,73 @@ jQuery(document).ready(function($) {
 			feed: feed,
 			success: function(data){
 				news = [];
+				newsDescription = [];
+				newsDate = [];
+				newsLink = [];
 				for (var i in data.item) {
 					var item = data.item[i];
-					news.push(item.title);
+					if (feedSource == TWITTER){
+						news.push(item.description);
+						d1 = new Date(item.pubDate);
+						newsDate.push(d1);
+						//2015-08-17T01:22:01+0000
+					}
+					else if (feedSource == WSJ){
+						news.push(item.title);
+						newsDescription.push(item.description);
+						newsDate.push(item.pubDate.substring(5, 16));
+						newsLink.push(item.link);
+					}
+					else if (feedSource == INSTAGRAM){
+						news.push(item.description);
+					}
+					else{
+						news.push(item.title);
+					}
 				}
 			}
 		});
 		setTimeout(function() {
 			fetchNews();
-		}, 60000);
+		}, 6000);
 	})();
 
 	(function showNews() {
-		var newsItem = news[newsIndex];
-		$('.news').updateWithText(newsItem,2000);
+		if (feedSource == TWITTER){
+			var newsItem = news[newsIndex];
+			if (newsDate[newsIndex] != undefined){
+				var newsItem2 = newsDate[newsIndex].toString().substring(0, 25);
+				var newsItem21 = moment(moment(newsDate[newsIndex].toString(), moment.ISO_8601)).fromNow(); 
+				var newsItem2 = newsItem2 + " -- " + newsItem21;
+				//moment("2010-01-01T05:06:07", )
+				//2015-08-17T01:22:01+0000
+			}
+			$('.news').updateWithText(newsItem, newsDelay);
+			$('.newsDate').updateWithText(newsItem2, newsDelay);
+			$('.newsDescription').updateWithText("", newsDelay);
+			}
+		else if (feedSource == WSJ){
+			if (newsDate[newsIndex] != undefined){
+				var newsItem = news[newsIndex];
+				var newsItem2 = newsDate[newsIndex].toString().substring(0, 25);
+				var newsItem3 = newsDescription[newsIndex];
+			}
+			$('.news').updateWithText(newsItem, newsDelay);
+			$('.newsDate5').updateWithText(newsItem2, newsDelay);
+			$('.newsDescription').updateWithText(newsItem3, newsDelay);
+		}
+		else if(feedSource == INSTAGRAM){
+			var newsItem2 = news[newsDescription];
+			$('.newsDate5').updateWithText(newsItem2, newsDelay);
+		}
+		else{
+			if (news[newsIndex] != undefined){
+				var newsItem = news[newsIndex];
+			}
+			$('.news').updateWithText(newsItem,newsDelay);
 
+		}
+		
 		newsIndex--;
 		if (newsIndex < 0) newsIndex = news.length - 1;
 		setTimeout(function() {
