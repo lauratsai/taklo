@@ -9,7 +9,7 @@ body, html {
 	font-family: "HelveticaNeue-Light";
 	letter-spacing: -2px;
 	color: #fff;
-	font-size: 75px;
+	font-size: 65px;
 	 -webkit-font-smoothing: antialiased;
 }
 .wi {
@@ -47,7 +47,8 @@ body, html {
 .lower-third
 {
 	position: absolute;
-	top: 66.666%;
+	/*top: 66.666%;*/
+	top: 60%;
 	height: 200px;
 	margin-top: -100px;
 	line-height: 100px;	
@@ -64,7 +65,22 @@ body, html {
 .bottom
 {
 	position: absolute;
+	bottom: 75px;
+}
+.bottom-date
+{
+	position: absolute;
 	bottom: 50px;
+}
+.bottom-date-wsj
+{
+	position: absolute;
+	bottom: 5px;
+}
+.bottom-description-wsj
+{
+	position:absolute;
+	bottom: 40px;
 }
 
 .xxsmall
@@ -96,6 +112,21 @@ body, html {
 }
 .small .wi {
 	line-height: 25px;
+}
+
+
+.small2 /*timestamp*/
+{
+	font-size: 15px;
+	letter-spacing: 0px;
+	font-family: "HelveticaNeue-Medium";
+}
+.mediumsmall
+{
+	font-size: 15px;
+	letter-spacing: 0px;
+	color:#fef;
+	font-family: "HelveticaNeue-Medium";
 }
 
 .medium
@@ -149,7 +180,7 @@ body, html {
 	color: #666;
 	padding-left: 5px;
 	position: relative;
-	top: -35px;
+	top: -30px;
 }
 
 .forecast-table {
