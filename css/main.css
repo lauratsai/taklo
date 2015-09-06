@@ -35,6 +35,11 @@ body, html {
 	text-align: right;
 }
 
+.date
+{
+	text-align: center;
+}
+
 .center-ver
 {
 	position: absolute;
@@ -224,6 +229,14 @@ body, html {
 	border-radius: 1200px;
 	display: none;
 }
+.welcome
+{
+	color: white;
+	font-family: 'HelveticaNeue-UltraLight';
+
+}
+
+
 
 @font-face {
   font-family: 'HelveticaNeue-UltraLight';
