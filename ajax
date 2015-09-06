@@ -1,0 +1,6 @@
+$.ajax({
+    url: 'api.reimaginebanking.com/atms?key=490dc7b0d7b47e7fd841baf3d35272aa',
+    success: function(results){
+        print("ajax success");
+    }
+});
