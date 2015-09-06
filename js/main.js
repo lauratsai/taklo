@@ -13,35 +13,6 @@ jQuery.fn.updateWithText = function(text, speed)
 	}
 }
 
-(function updateRandomText()
-	{
-        //see compliments.js
-		while (compliment == lastCompliment) {
-     
-      //Check for current time  
-      var compliments;
-      var date = new Date();
-      var hour = date.getHours();
-      //set compliments to use
-      if (hour >= 3 && hour < 9) compliments = morning;
-      if (hour >= 9 && hour < 12) compliments = midmorning;
-      if (hour >= 12 && hour < 17) compliments = afternoon;
-      if (hour >= 17 && hour < 22) compliments = evening;
-      if (hour >= 22 || hour < 3) compliments = night;
-
-		compliment = Math.floor(Math.random()*compliments.length);
-		}
-
-		$('.compliment').updateWithText(compliments[compliment], 4000);
-
-		lastCompliment = compliment;
-
-		setTimeout(function() {
-			updateCompliment(true);
-		}, 30000);
-
-	})();
-
 
 jQuery.fn.outerHTML = function(s) {
     return s
@@ -274,6 +245,35 @@ jQuery(document).ready(function($) {
 
 		setTimeout(function() {
 			updateCompliment(true);
+		}, 30000);
+
+	})();
+
+	(function updateRandomText()
+	{
+		var TOTAL_EVENTS = 10;
+
+		random_table = $('<table/>').addClass('xsmall').addClass('calendar-table');
+		opacity = 1;
+
+		for (var i = 0; i < TOTAL_EVENTS; i++) {
+			//var e = eventList[i];		
+			
+			if (i < NUM_EVENTS){
+				var row = $('<tr/>').css('opacity',opacity);
+				row.append($('<td/>').html("transaction").addClass('description'));
+				row.append($('<td/>').html("date").addClass('days dimmed'));
+				row.append($('<td/>').html("category").addClass('description xxsmall'));
+				random_table.append(row);
+			}
+		
+			opacity -= 1 / TOTAL_EVENTS;
+		}
+
+		$(".random").updateWithText(random_table, 4000);
+
+		setTimeout(function() {
+			updateRandomText(true);
 		}, 30000);
 
 	})();
