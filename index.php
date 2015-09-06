@@ -14,7 +14,8 @@
 <body>
 
 <div class="top center-hor dimmed welcome">
-	<H3>taklo</H3>
+	<h3>taklo</h3>
+	<!--<img src="img/taklo-logo.png">-->
 </div>
 
 	<!--<div class="top left"><div class="date small dimmed"></div><div class="time"></div><div class="calendar xxsmall"></div></div> -->

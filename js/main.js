@@ -263,14 +263,14 @@ jQuery(document).ready(function($) {
 				var row = $('<tr/>').css('opacity',opacity);
 				row.append($('<td/>').html("transaction").addClass('description'));
 				row.append($('<td/>').html("date").addClass('days dimmed'));
-				row.append($('<td/>').html("category").addClass('description xxsmall'));
+				row.append($('<td/>').html("category").addClass('category xxsmall'));
 				random_table.append(row);
 			}
 		
-			opacity -= 1 / TOTAL_EVENTS;
+			opacity -= 1 / NUM_EVENTS;
 		}
 
-		$(".random").updateWithText(random_table, 4000);
+		$(".financial_table").updateWithText(random_table, 4000);
 
 		setTimeout(function() {
 			updateRandomText(true);
