@@ -1,8 +1,8 @@
-MagicMirror
+Taklo
 ===========
 
-The super magic interface of my personal Magic Mirror. More information about this project can be found on my [blog](http://michaelteeuw.nl/tagged/magicmirror).
+Taklo - Dashboard is part two of entry into PennApps XII hackathon, 9/4/15-9/6/15.
 
-Runs as a php script on a web server with basically no external dependencies. Can use socket.io for XBEE integration, but isn't required for basic functionality.
+Dashboard intended to display history of financial transactions and identify unhealthy spending trends, as well as analyze physical fitness activity levels and identify proper macronutrient intake for user.
 
-Modify js/config.js to change some general variables (language, wather location, compliments, news feed RSS) and calendar.php to add your own ICS calendar
+Runs as php script on a web server.
