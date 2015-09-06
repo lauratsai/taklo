@@ -13,6 +13,7 @@ jQuery.fn.updateWithText = function(text, speed)
 	}
 }
 
+
 jQuery.fn.outerHTML = function(s) {
     return s
         ? this.before(s).remove()
@@ -246,6 +247,41 @@ jQuery(document).ready(function($) {
 			updateCompliment(true);
 		}, 30000);
 
+	})();
+
+	(function updateRandomText()
+	{
+		var TOTAL_EVENTS = 10;
+
+		random_table = $('<table/>').addClass('xsmall').addClass('calendar-table');
+		opacity = 1;
+
+		for (var i = 0; i < TOTAL_EVENTS; i++) {
+			//var e = eventList[i];		
+			
+			if (i < NUM_EVENTS){
+				var row = $('<tr/>').css('opacity',opacity);
+				row.append($('<td/>').html("transaction").addClass('description'));
+				row.append($('<td/>').html("date").addClass('days dimmed'));
+				row.append($('<td/>').html("category").addClass('category xxsmall'));
+				random_table.append(row);
+			}
+		
+			opacity -= 1 / NUM_EVENTS;
+		}
+
+		$(".financial_table").updateWithText(random_table, 4000);
+
+		setTimeout(function() {
+			updateRandomText(true);
+		}, 30000);
+
+	})();
+
+	(function updateFinancialTableData(){
+		$.getJSON('http://api.reimaginebanking.com/accounts/55e94a6bf8d8770528e6149c/purchases?key=490dc7b0d7b47e7fd841baf3d35272aa', function(json, textStatus){
+			$('.tester').updateWithText("success!", 1000);
+		})
 	})();
 
 	(function updateCurrentWeather()
