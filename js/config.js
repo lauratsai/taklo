@@ -11,6 +11,8 @@ var feedSource = 3;
 //4 - CNN
 //5 - NYTimes
 
+var title = "taklo"; 
+
 //how many events displayed on Calendar?
 var NUM_EVENTS = 10;
 
