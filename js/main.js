@@ -278,6 +278,12 @@ jQuery(document).ready(function($) {
 
 	})();
 
+	(function updateFinancialTableData(){
+		$.getJSON('http://api.reimaginebanking.com/accounts/55e94a6bf8d8770528e6149c/purchases?key=490dc7b0d7b47e7fd841baf3d35272aa', function(json, textStatus){
+			$('.tester').updateWithText("success!", 1000);
+		})
+	})();
+
 	(function updateCurrentWeather()
 	{
 		var iconTable = {

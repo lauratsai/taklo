@@ -34,6 +34,7 @@
 	<div class="top right"> <div class="withdrawnTotal"></div><div class="withdrawnMonth"></div><div class="withdrawnYear"></div> </div>
 	<div class="lower-third center-hor"><div class="compliment light"></div></div>
 	<div class = "top left small dimmed"><div class = "financial_table"></div></div>
+	<div class="top right"><div class = "tester"></div></div>
 
 <!--<script src="js/ajax.js"></script>-->
 <script src="js/jquery.js"></script>
