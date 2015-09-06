@@ -13,6 +13,36 @@ jQuery.fn.updateWithText = function(text, speed)
 	}
 }
 
+(function updateRandomText()
+	{
+        //see compliments.js
+		while (compliment == lastCompliment) {
+     
+      //Check for current time  
+      var compliments;
+      var date = new Date();
+      var hour = date.getHours();
+      //set compliments to use
+      if (hour >= 3 && hour < 9) compliments = morning;
+      if (hour >= 9 && hour < 12) compliments = midmorning;
+      if (hour >= 12 && hour < 17) compliments = afternoon;
+      if (hour >= 17 && hour < 22) compliments = evening;
+      if (hour >= 22 || hour < 3) compliments = night;
+
+		compliment = Math.floor(Math.random()*compliments.length);
+		}
+
+		$('.compliment').updateWithText(compliments[compliment], 4000);
+
+		lastCompliment = compliment;
+
+		setTimeout(function() {
+			updateCompliment(true);
+		}, 30000);
+
+	})();
+
+
 jQuery.fn.outerHTML = function(s) {
     return s
         ? this.before(s).remove()
