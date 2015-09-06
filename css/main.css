@@ -232,8 +232,11 @@ body, html {
 .welcome
 {
 	color: white;
-	font-family: 'HelveticaNeue-UltraLight';
-
+	font-family: 'Quora';
+}
+.category
+{
+	font-style: italic;
 }
 
 
